@@ -2,6 +2,7 @@ const { request, response } = require("express");
 const bcrypt = require('bcryptjs');
 
 const Usuario = require('../models/usuario.model');
+
 const { generarJWT } = require('../helpers/jwt');
 
 const getUsuarios = async(req = request, res = response) => {
@@ -22,6 +23,26 @@ const getUsuarios = async(req = request, res = response) => {
             ok: true,
             usuarios: usuarios,
             total: total
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            ok: false,
+            msg: 'Hable con el adminstrador'
+        });
+    }
+}
+
+const getUsuarioById = async(req = request, res = response) => {
+    const uid = req.params.id;
+
+    try {
+        const usuario = await Usuario.findById(uid);
+
+        res.json({
+            ok: true,
+            usuario: usuario
         });
 
     } catch (error) {
@@ -161,4 +182,5 @@ module.exports = {
     crearUsuario,
     actualizarUsuario,
     borrarUsuario,
+    getUsuarioById
 }
