@@ -6,11 +6,11 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middleware/validar-campos');
 const { validarJWT } = require('../middleware/validar-jwt');
-const { getMedicos, crearMedico, actualizarMedico, borrarMedico } = require('../controllers/medicos.controller');
+const { getMedicos, crearMedico, actualizarMedico, borrarMedico, getMedicoById } = require('../controllers/medicos.controller');
 
 const router = Router();
 
-router.get('/', getMedicos);
+router.get('/', validarJWT, getMedicos);
 
 //Uso de Middleware check
 router.post('/', [
@@ -27,6 +27,9 @@ router.put('/:id', [
     validarCampos
 ], actualizarMedico);
 
-router.delete('/:id', borrarMedico);
+router.delete('/:id', validarJWT, borrarMedico);
+
+// Obtener medico por ID
+router.get('/:id', validarJWT, getMedicoById);
 
 module.exports = router;
