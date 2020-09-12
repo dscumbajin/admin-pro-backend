@@ -6,11 +6,12 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middleware/validar-campos');
 const { validarJWT } = require('../middleware/validar-jwt');
-const { getHospitales, crearHospital, actualizarHospital, borrarHospital } = require('../controllers/hospitales.controller');
+const { getHospitales, crearHospital, actualizarHospital, borrarHospital, getHospitalesP } = require('../controllers/hospitales.controller');
 
 const router = Router();
 
-router.get('/', getHospitales);
+router.get('/', validarJWT, getHospitales);
+router.get('/todo/', validarJWT, getHospitalesP);
 
 //Uso de Middleware check
 router.post('/', [

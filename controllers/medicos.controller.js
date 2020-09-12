@@ -4,14 +4,22 @@ const Medico = require('../models/medico.model');
 
 const getMedicos = async(req = request, res = response) => {
 
+    const desde = Number(req.query.desde) || 0;
     try {
-        const medicos = await Medico.find()
+
+        const [medicos, total] = await Promise.all([
+            Medico.find()
             .populate('usuario', 'nombre img')
-            .populate('hospital', 'nombre img');
+            .populate('hospital', 'nombre img').skip(desde).limit(5),
+
+            Medico.countDocuments()
+        ]);
+
 
         res.json({
             ok: true,
-            medicos: medicos
+            medicos: medicos,
+            total: total
         });
 
 

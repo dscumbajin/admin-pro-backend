@@ -4,6 +4,27 @@ const Hospital = require('../models/hospital.model');
 
 const getHospitales = async(req = request, res = response) => {
 
+
+    try {
+        const hospitales = await Hospital.find()
+            .populate('usuario', 'nombre img');
+        res.json({
+            ok: true,
+            hospitales: hospitales
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            ok: false,
+            msg: 'Hable con el adminstrador'
+        });
+    }
+}
+
+const getHospitalesP = async(req = request, res = response) => {
+
     const desde = Number(req.query.desde) || 0;
 
     try {
@@ -142,6 +163,7 @@ module.exports = {
     getHospitales,
     crearHospital,
     actualizarHospital,
-    borrarHospital
+    borrarHospital,
+    getHospitalesP
 
 }
